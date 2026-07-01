@@ -1,0 +1,58 @@
+name: TestSprite Verification Loop
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+env:
+  TESTSPRITE_API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+  PROJECT_ID: ${{ secrets.TESTSPRITE_PROJECT_ID }}
+
+jobs:
+  build:
+    name: Build (sanity check before spending TestSprite runs)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run build
+
+  verify-loop:
+    name: TestSprite CLI — verify against live URL
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install TestSprite CLI
+        run: npm i -g @testsprite/testsprite-cli
+
+      - name: Run full test suite against live deployment
+        run: |
+          testsprite test run --all --project "$PROJECT_ID" \
+            --wait --output json > testsprite-result.json
+
+      - name: Upload failure bundles (if any)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testsprite-failure-bundles
+          path: .testsprite/
+          if-no-files-found: ignore
+
+      - name: Upload raw run result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testsprite-run-result
+          path: testsprite-result.json
