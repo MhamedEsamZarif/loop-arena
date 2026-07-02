@@ -1,12 +1,17 @@
-# 🎯 Loop Arena
+# Loop Arena
 
 **A live multiplayer bug-hunt game — and a live view of its own TestSprite loop.**
 
 Built for [TestSprite Hackathon Season 3](https://www.testsprite.com/hackathon-s3) — *"Build the Loop."*
 
+---
+
+## Live Links
+
 > Live app: https://loop-arena.vercel.app
 > Loop Dashboard: https://loop-arena.vercel.app/dashboard
 > Demo video: `TODO`
+> > GitHub Repository: https://github.com/MhamedEsamZarif/loop-arena
 
 ---
 
@@ -28,9 +33,37 @@ TestSprite S3 judges 40/40 on **Project Quality** and **Loop Quality**. A todo a
 - **Vercel** (deployment — required: TestSprite tests the live URL, not localhost)
 - **TestSprite CLI** as the verification loop, wired into GitHub Actions
 
+## Architecture
+
+```text
+             Player
+                │
+                ▼
+          Next.js 15 App
+                │
+     ┌──────────┴──────────┐
+     ▼                     ▼
+Supabase Auth        API Routes
+     │                     │
+     ▼                     ▼
+Realtime Engine      Game Logic
+     │                     │
+     └──────────┬──────────┘
+                ▼
+        Loop Dashboard
+                │
+                ▼
+         TestSprite CLI
+                │
+                ▼
+        GitHub Actions
+```
+
 ### Why not something "better" than React/Next/Supabase/Tailwind?
 
 For a 7-day build that must be live and testable from hour one, this stack wins on: (1) Vercel + Supabase = a public URL in minutes, satisfying the "no localhost" rule immediately; (2) Supabase Realtime gives WebSocket multiplayer without standing up custom infra, which would burn days we don't have; (3) Next.js API routes double as the backend, so there's one deploy target, one CI pipeline, one thing for the TestSprite CLI to point at. A separate custom backend (e.g. Go/Rust + raw WebSockets) would be more "impressive" in isolation but adds deployment surface and days of plumbing that don't move either Project Quality or Loop Quality — it would only cost us loop iterations, not earn them.
+
+---
 
 ## Folder structure
 
@@ -87,6 +120,26 @@ This repo's write → verify → fix history lives in [`LOOP.md`](./LOOP.md), wr
 
 **Note on CI status:** the GitHub Actions badge may show red. This is expected and documented — TestSprite's own run status (`blocked`) currently conflicts with its narrative summary (`all assertions passed`) on this project, a bug reproduced across three separate runs and reported in Discord `#cli-contribution`. See `LOOP.md` entry #1 for full detail with run IDs and evidence.
 See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for the exact Vercel + Supabase + TestSprite CLI + GitHub Actions setup, start to finish.
+
+## Project Highlights
+
+- Real-time multiplayer gameplay
+- Live synchronized leaderboard
+- TestSprite-powered verification
+- Public development loop visualization
+- Responsive modern UI
+- GitHub Actions CI/CD
+- Vercel deployment
+- Supabase Realtime
+- TypeScript-first architecture
+
+## Built for TestSprite Hackathon Season 3
+
+Loop Arena demonstrates that software quality is not only something developers measure behind the scenes—it can become an interactive experience.
+
+Instead of simply presenting the final application, Loop Arena exposes the engineering loop itself through live TestSprite verification.
+
+---
 
 ## License
 
