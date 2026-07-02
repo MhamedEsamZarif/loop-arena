@@ -4,8 +4,8 @@
 
 Built for [TestSprite Hackathon Season 3](https://www.testsprite.com/hackathon-s3) — *"Build the Loop."*
 
-> Live app: `TODO — add Vercel URL after deploy`
-> Loop Dashboard: `TODO — add /dashboard URL after deploy`
+> Live app: https://loop-arena.vercel.app
+> Loop Dashboard: https://loop-arena.vercel.app/dashboard
 > Demo video: `TODO`
 
 ---
