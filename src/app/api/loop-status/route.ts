@@ -1,45 +1,43 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import type { TestSpriteRun } from "@/types";
 
 /**
- * Server-side proxy to the TestSprite run-history API. Kept server-side so
- * TESTSPRITE_API_KEY never reaches the client bundle. The exact TestSprite
- * API response shape should be confirmed against the CLI/API docs
- * (https://docs.testsprite.com) once TESTSPRITE_PROJECT_ID is live — this
- * route normalizes whatever comes back into TestSpriteRun[] for the
- * dashboard to render.
+ * Reads loop run history from Supabase's `loop_runs` table, which is
+ * populated by GitHub Actions after every TestSprite CLI run (see
+ * .github/workflows/testsprite-verification-loop.yml). We read from our
+ * own database instead of calling TestSprite's API directly from the
+ * client-facing dashboard, since TestSprite doesn't publish a documented
+ * REST endpoint for run history — the CLI/CI is the source of truth here.
  */
 export async function GET() {
-  const apiKey = process.env.TESTSPRITE_API_KEY;
-  const projectId = process.env.TESTSPRITE_PROJECT_ID;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  if (!apiKey || !projectId) {
+  if (!supabaseUrl || !supabaseKey) {
     return NextResponse.json({ runs: [] satisfies TestSpriteRun[] });
   }
 
   try {
-    const res = await fetch(
-      `https://api.testsprite.com/v1/projects/${projectId}/runs`,
-      {
-        headers: { Authorization: `Bearer ${apiKey}` },
-        // Never cache API-key-bearing requests at the edge.
-        cache: "no-store",
-      }
-    );
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { data, error } = await supabase
+      .from("loop_runs")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
 
-    if (!res.ok) {
+    if (error || !data) {
       return NextResponse.json({ runs: [] satisfies TestSpriteRun[] });
     }
 
-    const data = await res.json();
-    const runs: TestSpriteRun[] = (data.runs ?? []).map((r: any) => ({
-      id: r.id,
-      projectId,
+    const runs: TestSpriteRun[] = data.map((r) => ({
+      id: String(r.id),
+      projectId: process.env.TESTSPRITE_PROJECT_ID ?? "",
       status: r.status,
-      startedAt: r.started_at ?? r.startedAt,
-      finishedAt: r.finished_at ?? r.finishedAt ?? null,
+      startedAt: r.created_at,
+      finishedAt: r.created_at,
       summary: r.summary ?? `${r.passed ?? 0} passed / ${r.failed ?? 0} failed`,
-      failureCount: r.failure_count ?? r.failed ?? 0,
+      failureCount: r.failed ?? 0,
     }));
 
     return NextResponse.json({ runs });
