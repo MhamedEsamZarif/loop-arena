@@ -85,6 +85,7 @@ This repo's write → verify → fix history lives in [`LOOP.md`](./LOOP.md), wr
 
 ## Deployment
 
+**Note on CI status:** the GitHub Actions badge may show red. This is expected and documented — TestSprite's own run status (`blocked`) currently conflicts with its narrative summary (`all assertions passed`) on this project, a bug reproduced across three separate runs and reported in Discord `#cli-contribution`. See `LOOP.md` entry #1 for full detail with run IDs and evidence.
 See [`DEPLOYMENT.md`](./DEPLOYMENT.md) for the exact Vercel + Supabase + TestSprite CLI + GitHub Actions setup, start to finish.
 
 ## License
