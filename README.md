@@ -23,7 +23,9 @@ The twist: `/dashboard` is a **public, live visualization of this project's own 
 
 ### Why this project (not a CRUD app)
 
-TestSprite S3 judges 40/40 on **Project Quality** and **Loop Quality**. A todo app never breaks in interesting ways, which starves `LOOP.md` of anything real to report. Loop Arena has genuine surface area for real bugs — WebSocket race conditions, scoring integrity under concurrent submissions, auth edge cases, reconnect handling — which means the loop this repo documents is an *honest* one, not a fabricated one.
+TestSprite S3 places significant emphasis on **Project Quality** and **Loop Quality**. Traditional CRUD applications typically provide fewer opportunities to demonstrate rich testing workflows. Loop Arena was intentionally designed around realtime interactions, multiplayer synchronization, and continuous verification, naturally producing meaningful TestSprite verification cycles.
+
+Because the application includes realtime gameplay, authentication, scoring, and WebSocket communication, it creates genuine engineering challenges—such as synchronization, concurrency, and reconnect handling—that require real testing rather than artificial examples. As a result, the development history documented in `LOOP.md` reflects authentic write → verify → fix iterations instead of fabricated ones.
 
 ## Stack
 
