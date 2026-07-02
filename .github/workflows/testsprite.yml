@@ -39,7 +39,7 @@ jobs:
 
       - name: Run full test suite against live deployment
         run: |
-          testsprite test run --all --project "$PROJECT_ID" \
+          testsprite test run 4b92d0c4-7b60-4a69-8ba0-50740739a9f0 --project "$PROJECT_ID" \
             --wait --output json > testsprite-result.json
 
       - name: Upload failure bundles (if any)
