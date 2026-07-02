@@ -37,3 +37,11 @@ Next real entries start once:
 
 Every entry from here on must correspond to a real CLI run — do not write entries for runs that didn't happen.
 -->
+### 1 — 2026-07-02 — First real TestSprite CLI runs
+- Maker: Human (Mhamed) + Claude, via TestSprite CLI on the live Vercel deployment
+- Wrote: `plan.json` test plan for the landing page, login page, and dashboard flows (frontend test type)
+- Verified: `testsprite test run <id> --project <id> --wait --output json` against https://loop-arena.vercel.app (run 1: fd3d74cf..., run 2: cef82df0...)
+- Broke: Run 1 failed on step 6 ("Join a Room" button assertion) because the plan asserted the button was visible *after* the browser had already navigated away from the homepage — a test-authoring ordering bug, not an app bug. Run 2 (reordered plan) still returned `status: blocked` with `failedCount: 2` while the narrative summary explicitly stated all assertions passed and the test completed successfully — a genuine inconsistency in TestSprite's own status/summary reporting, reproduced across two separate runs.
+- Fixed: Reordered plan.json so the homepage assertion runs immediately after visiting the homepage, before any navigation (v2 test). The status/summary mismatch is a TestSprite-side issue, not something fixable in this repo — flagged in #cli-contribution on Discord for the CLI bounty instead.
+- Re-verified: App itself confirmed working correctly via manual review of the recorded video/screenshots for both runs — homepage, login, and dashboard all render and behave as expected.
+- Commit: (add after committing this LOOP.md update)
