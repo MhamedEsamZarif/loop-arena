@@ -28,8 +28,9 @@ export async function GET() {
       .order("created_at", { ascending: false })
       .limit(50);
 
-    if (error || !data) {
-      return NextResponse.json({ runs: [] satisfies TestSpriteRun[] });
+   if (error || !data) {
+      console.error("loop-status supabase error:", error);
+      return NextResponse.json({ runs: [] satisfies TestSpriteRun[], debugError: error?.message ?? "no data" });
     }
 
     const runs: TestSpriteRun[] = data.map((r) => ({
