@@ -43,7 +43,8 @@ export async function GET() {
     }));
 
     return NextResponse.json({ runs });
-  } catch {
-    return NextResponse.json({ runs: [] satisfies TestSpriteRun[] });
+  } catch (err) {
+    console.error("loop-status error:", err);
+    return NextResponse.json({ runs: [] satisfies TestSpriteRun[], debugError: String(err) });
   }
 }
