@@ -10,6 +10,8 @@ import type { TestSpriteRun } from "@/types";
  * client-facing dashboard, since TestSprite doesn't publish a documented
  * REST endpoint for run history — the CLI/CI is the source of truth here.
  */
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
