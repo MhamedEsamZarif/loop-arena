@@ -19,7 +19,7 @@ export default function HomePage() {
 
       <div className="flex flex-wrap items-center justify-center gap-4">
         <Link
-          href="/login"
+          href="/play"
           className="rounded-lg bg-accent px-6 py-3 font-medium text-white transition hover:opacity-90"
         >
           Join Game →
