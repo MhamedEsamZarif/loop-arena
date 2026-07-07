@@ -145,7 +145,7 @@ Instead of simply presenting the final application, Loop Arena exposes the engin
 ## Screenshots
 
 ### Home
-![Home](assets/screenshots/home.png)
+![Home](assets/screenshots/01-home.png)
 
 ### Loop Dashboard
 ![Dashboard](assets/screenshots/dashboard.png)
