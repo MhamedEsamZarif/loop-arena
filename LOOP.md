@@ -59,3 +59,13 @@ Format per entry:
 - Fixed: Rewrote `/api/loop-status/route.ts` to read from Supabase instead of the unverified TestSprite endpoint; added a CI step that POSTs each real TestSprite CLI result into `loop_runs` after every run; marked the route `dynamic = "force-dynamic"` so Next.js never caches a stale empty result; re-copied the Supabase `service_role` key correctly into Vercel and redeployed.
 - Re-verified: `curl https://loop-arena.vercel.app/api/loop-status` now returns 5 real historical runs from `loop_runs`, and the live dashboard renders them instead of the empty state.
 - Commit: (fill in after your next push — this entry documents the session that led to the final working commit)
+
+### 4 — 2026-07-05 — Diagnosed and fixed the missing game loop (no round ever started)
+
+- Maker: Human (Mhamed) + Claude, reviewing a downloaded copy of the repo after Mhamed reported "there's no game" despite the CI checks being green.
+- Wrote: nothing new to start — began from the report and read `RoomClient.tsx`, `/api/rounds/route.ts`, and `/api/rounds/start/route.ts` side by side to see how they were actually wired together.
+- Verified: confirmed a real `/api/rounds/start` endpoint already existed (creates a `rounds` row, sets `ends_at`, enforces one active round per room) and a `/play` lobby page already existed — but `RoomClient.tsx` called neither. Its `reportBug` function posted `roundId: room.id` to `/api/rounds`, which expects an actual `rounds.id`; since a room's id is never a round's id, every submission would 404 with "Round not found."
+- Broke: this meant the entire play loop was dead on arrival — a player could open a room, see the seeded bugs, and click "I found this one," but the request could never succeed. There was no "start round" button, no timer, no way to actually play.
+- Fixed: rewrote `RoomClient.tsx` to (1) add a "Start round" button that calls `POST /api/rounds/start` and stores the returned round's real `id` and `ends_at` in state, (2) run a countdown timer driven off the server's `ends_at` (not a local counter, so it survives a backgrounded tab), (3) pass the real `round.id` — not `room.id` — to `/api/rounds` on every bug submission, and (4) disable already-found bugs and gray out submission until a round is active.
+- Re-verified: `npm install && npx tsc --noEmit && npm run build` on the corrected code → clean build, no type errors, all 12 routes compiled.
+- Commit: (add after pushing this fix to GitHub)
