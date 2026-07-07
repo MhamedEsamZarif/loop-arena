@@ -18,11 +18,7 @@ export default function HomePage() {
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
-        <Link
-          href="/login"
-          className="rounded-lg bg-accent px-6 py-3 font-medium text-white transition hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-        >
-          Join a Room
+        
         </Link>
         <Link
           href="/dashboard"
