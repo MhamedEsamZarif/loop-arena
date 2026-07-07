@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     console.log("exchangeCodeForSession:", { data, error });
-    
+
     if (error) {
       return NextResponse.json(
         {
@@ -50,6 +50,10 @@ export async function GET(request: Request) {
         { status: 500 }
       );
     }
-    
+
     return NextResponse.redirect(`${origin}${next}`);
+  }
+
+  // No code param at all — nothing to exchange.
+  return NextResponse.redirect(`${origin}/login?error=missing_code`);
 }
