@@ -26,9 +26,7 @@ export async function POST(request: Request) {
         error: "Invalid request",
         details: parsed.error.flatten(),
       },
-      {
-        status: 400,
-      }
+      { status: 400 }
     );
   }
 
@@ -36,7 +34,6 @@ export async function POST(request: Request) {
     .from("rooms")
     .insert({
       code: generateRoomCode(),
-      host_id: null, // Guest Mode
       sandbox_id: parsed.data.sandboxId,
       status: "lobby",
     })
@@ -44,24 +41,10 @@ export async function POST(request: Request) {
     .single();
 
   if (error) {
-    return NextResponse.json(
-      {
-        error: error.message,
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(
-    {
-      room: data,
-    },
-    {
-      status: 201,
-    }
-  );
+  return NextResponse.json({ room: data }, { status: 201 });
 }
 
 export async function GET() {
@@ -75,17 +58,8 @@ export async function GET() {
     .limit(20);
 
   if (error) {
-    return NextResponse.json(
-      {
-        error: error.message,
-      },
-      {
-        status: 500,
-      }
-    );
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({
-    rooms: data,
-  });
+  return NextResponse.json({ rooms: data });
 }
