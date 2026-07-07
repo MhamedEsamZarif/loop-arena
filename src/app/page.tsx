@@ -18,15 +18,13 @@ export default function HomePage() {
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
-        const [name, setName] = useState("");
+        <Link
+          href="/login"
+          className="rounded-lg bg-accent px-6 py-3 font-medium text-white transition hover:opacity-90"
+        >
+          Join Game →
+        </Link>
 
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
-        />
-        
-        router.push(`/room/${roomCode}`)
         <Link
           href="/dashboard"
           className="rounded-lg border border-white/20 px-6 py-3 font-medium text-white/90 transition hover:bg-white/5"
