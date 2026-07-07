@@ -141,6 +141,15 @@ Loop Arena demonstrates that software quality is not only something developers m
 
 Instead of simply presenting the final application, Loop Arena exposes the engineering loop itself through live TestSprite verification.
 
+
+## Screenshots
+
+### Home
+![Home](assets/screenshots/home.png)
+
+### Loop Dashboard
+![Dashboard](assets/screenshots/dashboard.png)
+
 ---
 
 ## License
