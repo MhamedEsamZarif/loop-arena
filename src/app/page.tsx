@@ -18,7 +18,19 @@ export default function HomePage() {
       </p>
 
       <div className="flex flex-wrap items-center justify-center gap-4">
+        const [name, setName] = useState("");
+
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Your name"
+        />
         
+        <button
+          onClick={() => router.push(`/room/${roomCode}?name=${encodeURIComponent(name)}`)}
+        >
+          Join Game
+        </button>
         </Link>
         <Link
           href="/dashboard"
