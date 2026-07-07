@@ -36,15 +36,20 @@ export async function GET(request: Request) {
       }
     );
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-if (error) {
-  console.error(error);
-  return NextResponse.json({
-    error: error.message,
-    details: error,
-  });
-}
-
-return NextResponse.redirect(`${origin}${next}`);
+    console.log("exchangeCodeForSession:", { data, error });
+    
+    if (error) {
+      return NextResponse.json(
+        {
+          message: "Exchange failed",
+          error: error.message,
+          code: error.code,
+        },
+        { status: 500 }
+      );
+    }
+    
+    return NextResponse.redirect(`${origin}${next}`);
 }
