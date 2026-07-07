@@ -26,12 +26,7 @@ export default function HomePage() {
           placeholder="Your name"
         />
         
-        <button
-          onClick={() => router.push(`/room/${roomCode}?name=${encodeURIComponent(name)}`)}
-        >
-          Join Game
-        </button>
-        </Link>
+        router.push(`/room/${roomCode}`)
         <Link
           href="/dashboard"
           className="rounded-lg border border-white/20 px-6 py-3 font-medium text-white/90 transition hover:bg-white/5"
