@@ -21,6 +21,15 @@ export default async function RoomPage({
     notFound();
   }
 
+  const mappedRoom = {
+    id: room.id,
+    code: room.code,
+    hostId: room.host_id,
+    status: room.status,
+    sandboxId: room.sandbox_id,
+    createdAt: room.created_at,
+  };
+
   const bugs = getBugsForSandbox(room.sandbox_id).map(
     ({ id, title, description, difficulty, basePoints }) => ({
       // Deliberately omit `validate` — it must never reach the client.
@@ -32,5 +41,5 @@ export default async function RoomPage({
     })
   );
 
-  return <RoomClient room={room} bugs={bugs} />;
+  return <RoomClient room={mappedRoom} bugs={bugs} />;
 }
