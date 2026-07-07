@@ -16,6 +16,14 @@ function generateRoomCode(): string {
 export async function POST(request: Request) {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+  }
+
   const body = await request.json().catch(() => ({}));
 
   const parsed = createRoomSchema.safeParse(body);
@@ -34,6 +42,7 @@ export async function POST(request: Request) {
     .from("rooms")
     .insert({
       code: generateRoomCode(),
+      host_id: user.id,
       sandbox_id: parsed.data.sandboxId,
       status: "lobby",
     })
